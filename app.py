@@ -4,8 +4,6 @@ from sql import *
 
 app = Flask(__name__)
 
-init_db()
-
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -16,9 +14,7 @@ def input():
         distance = request.form['distance']
         time = request.form['time']
         date = request.form['date']
-
         insert_data(distance=distance,time=time,date=date)
-
         return redirect(url_for('input'))
 
     return render_template('input.html')
@@ -37,7 +33,7 @@ def delete_last_row():
 def report():
     records = get_all_data_desc()
     total_distances,total_minutes = total_sums(records)
-    return render_template('report.html', minutes=round(total_minutes,2), distances=round(total_distances,2))
+    return render_template('report.html', minutes=total_minutes, distances=total_distances)
 
 @app.route('/distance_over_time.png')
 def dist_over_time_png():
