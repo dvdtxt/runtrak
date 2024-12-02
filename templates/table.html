@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>👀 History 👀</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="{{ url_for('index') }}"> RunTrak 🏃‍♂️💨 </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('input') }}"> Insert new data 📝</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('table') }}"> View History 👀 </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('report') }}"> View report 💡 </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container">
+        <h1 class="mt-5">History</h1>
+        <div class="table-responsive">
+            <table class="table table-stripped mt-3">
+                <thead>
+                    <tr>
+                        <th>Distance (KM)</th>
+                        <th>Time (Minutes)</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for record in records %}
+                    <tr>
+                        <td>{{ record[1] }}</td>
+                        <td>{{ record[2] }}</td>
+                        <td>{{ record[3] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="d-flex justify-content-between mb-3">
+            <a href="{{ url_for('input') }}" class="btn btn-primary"> New dataset ✍ </a>
+            <button id="delete-last-row" class="btn btn-danger"> Delete last dataset 💥 </button>
+        </div>
+        <script>
+            document.getElementById('delete-last-row').addEventListener('click', function () {
+                if (confirm('Estas seguro?')) {
+                    fetch('/delete_last_row', {
+                        method: 'POST'
+                    }).then(response => {
+                        if (response.ok) {
+                            location.reload();
+                        } else {
+                            alert('Error Deleting 🥴');
+                        }
+                    });
+                }
+            });
+        </script>
+    </div>
+</body>
+</html>
